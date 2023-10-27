@@ -4,6 +4,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Random;
+import java.util.logging.Level;
+
 import javax.swing.*;
 
 /** D.
@@ -17,7 +19,8 @@ public class TetrisGame extends JPanel implements ActionListener, KeyListener {
     public int lines = 0;
     public int totalLines = 0;
     public int numFullLines = 0;
-    public int level = 1; // initially 1
+    public int startLevel = 1; // initially 1
+    public int level;
     public int score = 0;
     public int easter = 0;
 
@@ -31,6 +34,16 @@ public class TetrisGame extends JPanel implements ActionListener, KeyListener {
     public Tetromino currentTetromino;
     public Tetromino nextTetromino;
     public Tetromino lastTetromino;
+    public Tetromino holdTetromino;
+    public Tetromino dummyTetromino;
+    public boolean itemInHold;
+    public boolean holdUsed;
+
+    JLabel scoreLabel;
+    JLabel levelLabel;
+    JLabel linesLabel;
+
+    //TetrisGUI gui = new TetrisGUI();
 
     /** Initializes game.
      * 
@@ -40,8 +53,11 @@ public class TetrisGame extends JPanel implements ActionListener, KeyListener {
         setFocusable(true);
         addKeyListener(this);
         updateLevel();
+        scoreLabel = new JLabel();
+        linesLabel = new JLabel();
+        levelLabel = new JLabel();
         timer = new Timer(delay, this);
-        timer.start();
+        //timer.start();
     }
 
     /* Sets all grid blocks black.
@@ -66,6 +82,7 @@ public class TetrisGame extends JPanel implements ActionListener, KeyListener {
         //System.out.println("last: " + lastTetromino.getColorName(lastTetromino.getColor()));
         currentX = WIDTH / 2 - 1;
         currentY = 0;
+        holdUsed = false;
     }
 
     /* Given an 
@@ -103,8 +120,15 @@ public class TetrisGame extends JPanel implements ActionListener, KeyListener {
         numFullLines = 0;
         removeFullLines();
         updateLevel();
-        System.out.println("lines: " + totalLines 
+        timer.setDelay(delay);
+        System.out.println("lines: " + lines 
+            + " totalLines: " + totalLines
             + " level: " + level + " score: " + score + " delay: " + delay);
+        lines = 0;
+        scoreLabel.setText("SCORE: " + score);
+        linesLabel.setText("LINES: "+totalLines);
+        levelLabel.setText("LEVEL: "+ level);
+        
     }
 
     /**D.
@@ -133,12 +157,12 @@ public class TetrisGame extends JPanel implements ActionListener, KeyListener {
                 removeFullLines();
                 if (numFullLines > 0 && numFullLines != 4) {
                     lines = lines + numFullLines;
-                    totalLines = lines + numFullLines;
+                    totalLines += lines;
                     score = score + (100 + 200 * (numFullLines - 1)) * level;
                     numFullLines = 0;
                 } else if (numFullLines == 4) {
                     lines = lines + numFullLines;
-                    totalLines = lines + numFullLines;
+                    totalLines += lines;
                     score = score + 800 * level;
                     numFullLines = 0;
                 }
@@ -148,10 +172,9 @@ public class TetrisGame extends JPanel implements ActionListener, KeyListener {
     }
 
     public void updateLevel() {
-        if (lines > 10) {
-            level++;
-            lines = lines - 10;
-        }
+        
+        level = startLevel + (totalLines / 10);
+
         if (level < 10) {
             switch (level) {
                 case 1:
@@ -219,6 +242,7 @@ public class TetrisGame extends JPanel implements ActionListener, KeyListener {
     public boolean gameEnded() {
         for (int i = 0; i < WIDTH; i++) {
             if (board[i][1] != 0) {
+                //TetrisGUI.gameEnded();
                 return true;
             }
         }
@@ -226,7 +250,7 @@ public class TetrisGame extends JPanel implements ActionListener, KeyListener {
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {       
+    public void actionPerformed(ActionEvent e) {
         if (isFallingFinished) {
             isFallingFinished = false;
             if (!gameEnded()) {
@@ -251,7 +275,7 @@ public class TetrisGame extends JPanel implements ActionListener, KeyListener {
     }
 
     public void drawSquare(Graphics g, int x, int y, int color) {
-        Color[] colors = {Color.GRAY, Color.CYAN, Color.YELLOW, // Change theme with White/Gray
+        Color[] colors = {Color.WHITE, Color.CYAN, Color.YELLOW, // Change theme with White/Gray
             Color.MAGENTA, Color.ORANGE, Color.BLUE, Color.GREEN, Color.RED, Color.BLACK};
         Color blockColor = colors[color];
 
@@ -325,6 +349,7 @@ public class TetrisGame extends JPanel implements ActionListener, KeyListener {
     public void keyPressed(KeyEvent e) {
         if (!gameEnded()) {
             int keyCode = e.getKeyCode();
+            /*
             if (keyCode == KeyEvent.VK_P) {
                 isPaused = !isPaused;
                 if (isPaused) {
@@ -333,13 +358,14 @@ public class TetrisGame extends JPanel implements ActionListener, KeyListener {
                     timer.start();
                 }
                 repaint();
-            }
+            }*/
             if (keyCode == KeyEvent.VK_T) {
                 easter++;
             }
             if (!isStarted || isPaused) {
                 return;
             }
+
             switch (keyCode) {
                 case KeyEvent.VK_LEFT:
                     moveLeft();
@@ -357,6 +383,27 @@ public class TetrisGame extends JPanel implements ActionListener, KeyListener {
                     break;
                 case KeyEvent.VK_SPACE:
                     dropTetromino();
+                    break;
+                case KeyEvent.VK_C:
+                    if (!holdUsed) {
+                        if (!itemInHold) {
+                            holdTetromino = currentTetromino;
+                            newTetromino();
+                            itemInHold = true;
+                            holdUsed = true;
+                            System.out.println(
+                                holdTetromino.getColorName(holdTetromino.getColor()));
+                        } else {
+                            if (isValidMove(currentX, currentY, holdTetromino)) {
+                                dummyTetromino = holdTetromino;
+                                holdTetromino  = currentTetromino;
+                                currentTetromino = dummyTetromino;
+                                holdUsed = true;
+                                System.out.println(
+                                    holdTetromino.getColorName(holdTetromino.getColor()));
+                            }
+                        }
+                    }
                     break;
                 default:
                     break;
@@ -385,19 +432,21 @@ public class TetrisGame extends JPanel implements ActionListener, KeyListener {
         tetrisGame.startGame();
     }
 
+    /**d. */
     public void startGame() {
         isStarted = true;
         initBoard();
         nextTetromino = TetrominoFactory.getRandomTetromino();
         lastTetromino = TetrominoFactory.getRandomTetromino();
         newTetromino();
+        itemInHold = false;
         timer.start();
     }
 }
 
 class Tetromino {
-    public int[][] shape;
-    public int color;
+    private int[][] shape;
+    private int color;
 
     /**d. */
     public Tetromino(int[][] shape, int color) {
@@ -478,7 +527,7 @@ class Tetromino {
 }
 
 class TetrominoFactory {
-    public static final Tetromino[] TETROMINOS = {
+    private static final Tetromino[] TETROMINOS = {
         new Tetromino(new int[][]{{1, 1, 1, 1}}, 1), // I-shape (Cyan)
         new Tetromino(new int[][]{{1, 1}, {1, 1}}, 2), // O-shape (Yellow)
         new Tetromino(new int[][]{{1, 1, 1}, {0, 1, 0}}, 3), // T-shape (Magenta)
@@ -486,6 +535,8 @@ class TetrominoFactory {
         new Tetromino(new int[][]{{1, 1, 1}, {1, 0, 0}}, 5), // J-shape (Blue)
         new Tetromino(new int[][]{{1, 1, 0}, {0, 1, 1}}, 6), // S-shape (Green)
         new Tetromino(new int[][]{{0, 1, 1}, {1, 1, 0}}, 7)  // Z-shape (Red)
+        //new Tetromino(new int[][]{{1, 1, 1}, {0, 1, 0}, {0, 1, 0}}, 8), // T-shape
+        //new Tetromino(new int[][]{{1, 1, 1}, {0, 1, 0}, {0, 1, 0}}, 8)
     };
 
     /**Gets a random tetromino.  */

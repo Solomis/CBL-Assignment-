@@ -1,6 +1,9 @@
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,7 +13,7 @@ import javax.swing.*;
 import javax.sound.sampled.*;
 
 
-public class TetrisGUI extends JFrame implements ActionListener {
+public class TetrisGUI extends JFrame implements KeyListener, ActionListener {
     TetrisGame game;
 
     JFrame frame;
@@ -25,15 +28,13 @@ public class TetrisGUI extends JFrame implements ActionListener {
     JPanel tintPanel;
     JPanel howtoplayPanel;
     JPanel highscorePanel;
+    JPanel gameendPanel;
     
     
     JLabel holdLabel;
     JLabel titleLabel;
     JLabel playLabel;
     JLabel nextLabel;
-    JLabel scoreLabel;
-    JLabel levelLabel;
-    JLabel linesLabel;
     JLabel gamePausedLabel;
     JLabel highScoreLabel;
     JLabel highScore1Label;
@@ -41,6 +42,7 @@ public class TetrisGUI extends JFrame implements ActionListener {
     JLabel highScore3Label;
     JLabel highScore4Label;
     JLabel highScore5Label;
+    JLabel gameoverLabel;
 
    
     JButton lButton;
@@ -56,12 +58,14 @@ public class TetrisGUI extends JFrame implements ActionListener {
     JButton playButton;
     JButton quitButton2;
     JButton howtoplayButton2;
+    JButton replayButton;
 
     
     public TetrisGUI() {
         
-        frame = new JFrame("Tetris");
-        gamePanel = new JPanel();
+        frame = new JFrame();
+        
+        gamePanel = new JPanel(new BorderLayout());
         nextPanel = new JPanel();
         holdPanel = new JPanel();
         scorePanel = new JPanel();
@@ -71,6 +75,7 @@ public class TetrisGUI extends JFrame implements ActionListener {
         tintPanel = new JPanel();
         howtoplayPanel = new JPanel();
         highscorePanel = new JPanel();
+        gameendPanel = new JPanel();
 
         game = new TetrisGame();
         
@@ -87,19 +92,22 @@ public class TetrisGUI extends JFrame implements ActionListener {
         playButton = new JButton();
         quitButton2 = new JButton();
         howtoplayButton2 = new JButton();
+        replayButton = new JButton();
 
         gamePausedLabel = new JLabel("GAME PAUSED",SwingConstants.CENTER);
         highScoreLabel = new JLabel("HIGH SCORES",SwingConstants.CENTER);
         holdLabel = new JLabel("HOLD",SwingConstants.CENTER);
-        scoreLabel = new JLabel("SCORE",SwingConstants.CENTER);
-        nextLabel = new JLabel("NEXT",SwingConstants.CENTER);
-        linesLabel = new JLabel("LINES",SwingConstants.CENTER);
-        levelLabel = new JLabel("LEVEL",SwingConstants.CENTER);
+        nextLabel = new JLabel("NEXT",SwingConstants.CENTER);  
         highScore1Label = new JLabel("",SwingConstants.CENTER);
         highScore2Label = new JLabel("",SwingConstants.CENTER);
         highScore3Label = new JLabel("",SwingConstants.CENTER);
         highScore4Label = new JLabel("",SwingConstants.CENTER);
         highScore5Label = new JLabel("",SwingConstants.CENTER);
+        gameoverLabel = new JLabel("GAME OVER",SwingConstants.CENTER);
+
+        addKeyListener(this);
+        setFocusable(true);
+        requestFocus();
 
     }
 
@@ -142,6 +150,18 @@ public class TetrisGUI extends JFrame implements ActionListener {
             }
         } 
 
+        public Font font() {
+            try {
+                File fontFile = new File("C:\\Programming Course\\CBL-Assignment\\SummerPixel22Regular-jE0W7.ttf");
+                Font font = Font.createFont(Font.TRUETYPE_FONT, fontFile);
+                Font sizedFont = font.deriveFont(39f);
+                return sizedFont;
+            } catch (FontFormatException | IOException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
         public class player {
             private String username;
             private int highscore;
@@ -167,13 +187,21 @@ public class TetrisGUI extends JFrame implements ActionListener {
                 this.highscore = highScore;
             }
         }
+
+        public void setupReplayButton(){
+            gameendPanel.add(replayButton);
+            replayButton.setContentAreaFilled(false);
+            replayButton.setBounds(75, 100, 150, 75);     
+            replayButton.setBorderPainted(false);  
+            replayButton.setIcon(setupIcon("C:\\\\Programming Course\\\\CBL-Assignment\\\\Images\\\\replay.png", lButton));
+        }
         
         public void setuplButton() {
             howtoplayPanel.add(lButton);
             lButton.setContentAreaFilled(false);
             lButton.setBounds(250, 700, 50, 50);     
             lButton.setBorderPainted(false);  
-            lButton.setIcon(setupIcon("C:\\\\Programming Course\\\\game\\\\Images\\\\leftarrow.png", lButton));
+            lButton.setIcon(setupIcon("C:\\\\Programming Course\\\\CBL-Assignment\\\\Images\\\\leftarrow.png", lButton));
 
         }
 
@@ -182,7 +210,7 @@ public class TetrisGUI extends JFrame implements ActionListener {
             rButton.setContentAreaFilled(false);
             rButton.setBounds(550, 700, 50, 50);  
             rButton.setBorderPainted(false);     
-            rButton.setIcon(setupIcon("C:\\\\Programming Course\\\\game\\\\Images\\\\rightarrow.png", rButton));
+            rButton.setIcon(setupIcon("C:\\\\Programming Course\\\\CBL-Assignment\\\\Images\\\\rightarrow.png", rButton));
 
         }
 
@@ -191,7 +219,7 @@ public class TetrisGUI extends JFrame implements ActionListener {
             doneButton.setContentAreaFilled(false);
             doneButton.setBounds(350, 700, 100, 50); 
             doneButton.setBorderPainted(false);
-            doneButton.setIcon(setupIcon("C:\\\\Programming Course\\\\game\\\\Images\\\\backarrow.png", doneButton));           
+            doneButton.setIcon(setupIcon("C:\\\\Programming Course\\\\CBL-Assignment\\\\Images\\\\backarrow.png", doneButton));           
         }
 
         public void setupPlayButton() {
@@ -199,7 +227,7 @@ public class TetrisGUI extends JFrame implements ActionListener {
             playButton.setContentAreaFilled(false);
             playButton.setBounds(50, 200, 200, 50);       
             playButton.setBorderPainted(false);
-            playButton.setIcon(setupIcon("C:\\Programming Course\\game\\Images\\play.png", playButton));
+            playButton.setIcon(setupIcon("C:\\Programming Course\\CBL-Assignment\\Images\\play.png", playButton));
         }
         
         public void setupLevelButton() {
@@ -207,34 +235,35 @@ public class TetrisGUI extends JFrame implements ActionListener {
             levelButton.setContentAreaFilled(false);        
             levelButton.setBounds(77, 265,150, 50); 
             levelButton.setBorderPainted(false);
-            levelButton.setIcon(setupIcon("C:\\Programming Course\\game\\Images\\level 1.png", levelButton));
+            levelButton.setIcon(setupIcon("C:\\Programming Course\\CBL-Assignment\\Images\\level 1.png", levelButton));
             levelButton.setFocusPainted(false);
         }
 
         public void setupQuitButton() {
             pausePanel.add(quitButton);
             quitButton.setContentAreaFilled(false);
-            quitButton.setBounds(50, 300,100, 50);
+            quitButton.setBounds(50, 300,150, 75);
             quitButton.setBorderPainted(false);
-            quitButton.setIcon(setupIcon("C:\\Programming Course\\game\\Images\\quit.png", quitButton));
+            quitButton.setIcon(setupIcon("C:\\Programming Course\\CBL-Assignment\\Images\\quit.png", quitButton));
         }
 
         public void setupQuitButton2() {
 
             startPanel.add(quitButton2);
             quitButton2.setContentAreaFilled(false);
-            quitButton2.setBounds(195, 540,50, 50);
+            quitButton2.setBounds(175, 540,50, 50);
             quitButton2.setBorderPainted(false);
-            quitButton2.setOpaque(false);
-            quitButton2.setIcon(setupIcon("C:\\Programming Course\\game\\Images\\quit2.png", quitButton2));
+            quitButton2.setBackground(Color.LIGHT_GRAY);
+            quitButton2.setOpaque(true);
+            quitButton2.setIcon(setupIcon("C:\\Programming Course\\CBL-Assignment\\Images\\quit2.png", quitButton2));
         }
         
         public void setuphowtoplayButton() {
             pausePanel.add(howtoplayButton);
             howtoplayButton.setContentAreaFilled(false);
-            howtoplayButton.setBounds(50, 300,100, 50);
+            howtoplayButton.setBounds(50, 300,150, 75);
             howtoplayButton.setBorderPainted(false);
-            howtoplayButton.setIcon(setupIcon("C:\\Programming Course\\game\\Images\\howtoplay.png", howtoplayButton));
+            howtoplayButton.setIcon(setupIcon("C:\\Programming Course\\CBL-Assignment\\Images\\howtoplay.png", howtoplayButton));
         }
 
         public void setuphowtoplayButton2() {
@@ -242,17 +271,18 @@ public class TetrisGUI extends JFrame implements ActionListener {
             howtoplayButton2.setContentAreaFilled(false);
             howtoplayButton2.setBounds(75, 540,50, 50);
             howtoplayButton2.setBorderPainted(false);
-            howtoplayButton2.setOpaque(false);
-            howtoplayButton2.setIcon(setupIcon("C:\\Programming Course\\game\\Images\\howtoplay2.png", howtoplayButton2));
+            howtoplayButton2.setBackground(Color.LIGHT_GRAY);
+            howtoplayButton2.setOpaque(true);
+            howtoplayButton2.setIcon(setupIcon("C:\\Programming Course\\CBL-Assignment\\Images\\howtoplay2.png", howtoplayButton2));
         }
 
 
         public void setupResumeButton() {
             pausePanel.add(resumeButton);
             resumeButton.setContentAreaFilled(false);
-            resumeButton.setBounds(50, 300,100, 50);
+            resumeButton.setBounds(50, 300,150, 75);
             resumeButton.setBorderPainted(false);
-            resumeButton.setIcon(setupIcon("C:\\Programming Course\\game\\Images\\resume.png", resumeButton));
+            resumeButton.setIcon(setupIcon("C:\\Programming Course\\CBL-Assignment\\Images\\resume.png", resumeButton));
         }
 
         public void setupPauseButton() {
@@ -260,7 +290,7 @@ public class TetrisGUI extends JFrame implements ActionListener {
             pauseButton.setContentAreaFilled(false);                  
             pauseButton.setBounds(765, 500,70, 70); 
             pauseButton.setBorderPainted(false);
-            pauseButton.setIcon(setupIcon("C:\\Programming Course\\game\\Images\\pause.png", pauseButton));            
+            pauseButton.setIcon(setupIcon("C:\\Programming Course\\CBL-Assignment\\Images\\pause.png", pauseButton));            
         }
 
         public void setupMuteButton() {
@@ -268,27 +298,44 @@ public class TetrisGUI extends JFrame implements ActionListener {
             muteButton.setContentAreaFilled(false);
             muteButton.setBounds(665, 500,70, 70);
             muteButton.setBorderPainted(false);
-            muteButton.setIcon(setupIcon("C:\\Programming Course\\game\\Images\\unmute.jpg", muteButton));
+            muteButton.setIcon(setupIcon("C:\\Programming Course\\CBL-Assignment\\Images\\unmute.jpg", muteButton));
            
         }
        
+        public void setupGameEndPanel() {
+            frame.add(gameendPanel);
+            gameendPanel.setLayout(null);
+            gameendPanel.setSize(300, 400);
+            gameendPanel.setLocation(300,150);
+            gameendPanel.setBackground(Color.DARK_GRAY);
+            gameoverLabel.setFont(font().deriveFont(40f));
+            gameoverLabel.setBounds(50, 20, 200, 50);
+            gameoverLabel.setForeground(Color.white);
+            gameendPanel.add(gameoverLabel);
+            highscorePanel.setLocation(10,10);
+            //gameendPanel.add(replayButton);
+    
+
+
+        }
+
         public void setuphowtoplayPanel() {
 
             frame.add(howtoplayPanel);
             howtoplayPanel.setSize(800, 600);
-            howtoplayPanel.setLocation(43, 40);
-            //setupBackground("C:\\Programming Course\\game\\Images\\control.png", howtoplayPanel);
+            howtoplayPanel.setLocation(50, 40);
+            setupBackground("C:\\Programming Course\\CBL-Assignment\\Images\\control.png", howtoplayPanel);
             howtoplayPanel.setLayout(null);
 
             setuplButton();       
-            lButton.setBounds(200,700,50,50);     
+            //lButton.setBounds(200,700,50,50);     
             setupdoneButton();
-            doneButton.setBounds(350, 700, 100, 50);
+            //doneButton.setBounds(350, 700, 100, 50);
             setuprButton();
-            rButton.setBounds(500,700,50,50);
+            //rButton.setBounds(500,700,50,50);
            
         }
-        Color tintColor = new Color(0,0,0,200);
+        public Color tintColor = new Color(0,0,0,200);
         
         public void setupTintPanel() {
             frame.add(tintPanel);
@@ -298,6 +345,7 @@ public class TetrisGUI extends JFrame implements ActionListener {
 
         public void setupHighScorePanel() { 
             startPanel.add(highscorePanel);
+            gameendPanel.add(highscorePanel);
             highscorePanel.setSize(250, 200);
             highscorePanel.setLocation(25, 330);
             highscorePanel.setBackground(Color.DARK_GRAY);
@@ -346,18 +394,6 @@ public class TetrisGUI extends JFrame implements ActionListener {
 
         }
 
-        public Font font() {
-            try {
-                File fontFile = new File("C:\\Programming Course\\game\\SummerPixel22Regular-jE0W7.ttf");
-                Font font = Font.createFont(Font.TRUETYPE_FONT, fontFile);
-                Font sizedFont = font.deriveFont(39f);
-                return sizedFont;
-            } catch (FontFormatException | IOException e) {
-                e.printStackTrace();
-                return null;
-            }
-        }
-
         public void setupPausePanel() {
             frame.add(pausePanel);
             pausePanel.setSize(250, 420);
@@ -370,11 +406,11 @@ public class TetrisGUI extends JFrame implements ActionListener {
             pausePanel.add(gamePausedLabel); 
 
             setupResumeButton();
-            resumeButton.setBounds(80, 80,100, 50);
+            resumeButton.setBounds(53, 80,150, 75);
             setuphowtoplayButton();
-            howtoplayButton.setBounds(80, 180,100, 50);
+            howtoplayButton.setBounds(50, 180,150, 75);
             setupQuitButton();
-            quitButton.setBounds(80, 280,100, 50);
+            quitButton.setBounds(55, 280,150, 75);
 
         }
 
@@ -394,11 +430,13 @@ public class TetrisGUI extends JFrame implements ActionListener {
             setupPlayButton();  
             setupLevelButton();
             setupHighScorePanel();
+
             setupQuitButton2();
+
             setuphowtoplayButton2();
 
             JLabel lblNewLabel = new JLabel();
-            ImageIcon imageIcon = new ImageIcon("C:\\Programming Course\\game\\Images\\logo.png");
+            ImageIcon imageIcon = new ImageIcon("C:\\Programming Course\\CBL-Assignment\\Images\\logo.png");
             Image image = imageIcon.getImage();
             Image scaledImage = image.getScaledInstance(350,175, Image.SCALE_DEFAULT);
             lblNewLabel.setIcon(new ImageIcon(scaledImage));
@@ -409,10 +447,9 @@ public class TetrisGUI extends JFrame implements ActionListener {
         
 
         public void setupGamePanel() {
-            frame.add(game); 
-            game.setSize(300,600);
-            game.setVisible(false);
-            game.setLocation(300,50); 
+            frame.add(gamePanel); 
+            gamePanel.setSize(300,600);
+            gamePanel.setLocation(300,50); 
          }
         
 
@@ -424,7 +461,7 @@ public class TetrisGUI extends JFrame implements ActionListener {
             nextPanel.setBackground(trans);
 
             JLabel lblNewLabel = new JLabel();
-            ImageIcon imageIcon = new ImageIcon("C:\\Programming Course\\game\\Images\\backgroundnext.jpg");
+            ImageIcon imageIcon = new ImageIcon("C:\\Programming Course\\CBL-Assignment\\Images\\backgroundnext.jpg");
             Image scaledImage = imageIcon.getImage().getScaledInstance(200, 300, Image.SCALE_SMOOTH);
             lblNewLabel.setIcon(new ImageIcon(scaledImage));
             nextPanel.add(lblNewLabel);
@@ -446,7 +483,7 @@ public class TetrisGUI extends JFrame implements ActionListener {
             holdPanel.setBackground(trans);
 
             JLabel lblNewLabel = new JLabel();
-            ImageIcon imageIcon = new ImageIcon("C:\\Programming Course\\game\\Images\\backgroundhold.jpg"); 
+            ImageIcon imageIcon = new ImageIcon("C:\\Programming Course\\CBL-Assignment\\Images\\backgroundhold.jpg"); 
             Image image = imageIcon.getImage();
             Image scaledImage = image.getScaledInstance(200,200, Image.SCALE_SMOOTH);
             lblNewLabel.setIcon(new ImageIcon(scaledImage));
@@ -461,6 +498,8 @@ public class TetrisGUI extends JFrame implements ActionListener {
 
         }
 
+        
+
         public void setupScorePanel() {
 
             frame.add(scorePanel);
@@ -469,38 +508,29 @@ public class TetrisGUI extends JFrame implements ActionListener {
             scorePanel.setBackground(trans);
 
             JLabel lblNewLabel = new JLabel();
-            ImageIcon imageIcon = new ImageIcon("C:\\Programming Course\\game\\Images\\backgroundscore.jpg");
+            ImageIcon imageIcon = new ImageIcon("C:\\Programming Course\\CBL-Assignment\\Images\\backgroundscore.jpg");
             Image image = imageIcon.getImage();
             Image scaledImage = image.getScaledInstance(200,200, Image.SCALE_SMOOTH);
             lblNewLabel.setIcon(new ImageIcon(scaledImage));
             scorePanel.add(lblNewLabel);
 
-            int score = 0;
-            scoreLabel.setFont(font().deriveFont(35f));
-            scoreLabel.setBounds(10, 10, 180, 50);  
-            scoreLabel.setForeground(Color.white); 
-            scoreLabel.setBackground(tintColor);
-            scoreLabel.setOpaque(true);     
-            lblNewLabel.add(scoreLabel);
-            scoreLabel.setText("SCORE: "+ score);
+            game.scoreLabel.setFont(font().deriveFont(35f));
+            game.scoreLabel.setBounds(10, 10, 180, 50);  
+            game.scoreLabel.setForeground(Color.white);    
+            lblNewLabel.add(game.scoreLabel);
+            game.scoreLabel.setText("SCORE: ");
+            
+            game.levelLabel.setFont(font().deriveFont(35f));
+            game.levelLabel.setBounds(10, 70, 180, 50);  
+            game.levelLabel.setForeground(Color.white);     
+            lblNewLabel.add(game.levelLabel);
+            game.levelLabel.setText("LEVEL: ");
 
-            int level = 0;
-            levelLabel.setFont(font().deriveFont(35f));
-            levelLabel.setBounds(10, 70, 180, 50);  
-            levelLabel.setForeground(Color.white); 
-            levelLabel.setBackground(tintColor);
-            levelLabel.setOpaque(true);     
-            lblNewLabel.add(levelLabel);
-            levelLabel.setText("LEVEL: "+ level);
-
-            int lines = 0;
-            linesLabel.setFont(font().deriveFont(35f));
-            linesLabel.setBounds(10, 130, 180, 50);  
-            linesLabel.setForeground(Color.white); 
-            linesLabel.setBackground(tintColor);
-            linesLabel.setOpaque(true);     
-            lblNewLabel.add(linesLabel);
-            linesLabel.setText("LINES: "+ lines);
+            game.linesLabel.setFont(font().deriveFont(35f));
+            game.linesLabel.setBounds(10, 130, 180, 50);  
+            game.linesLabel.setForeground(Color.white);    
+            lblNewLabel.add(game.linesLabel);
+            game.linesLabel.setText("LINES: ");
 
         }
 
@@ -512,7 +542,7 @@ public class TetrisGUI extends JFrame implements ActionListener {
             offsetPanel.setBackground(trans);
 
             JLabel lblNewLabel = new JLabel();
-            ImageIcon imageIcon = new ImageIcon("C:\\Programming Course\\game\\Images\\backroundframe.jpg");
+            ImageIcon imageIcon = new ImageIcon("C:\\Programming Course\\CBL-Assignment\\Images\\backroundframe.jpg");
             Image image = imageIcon.getImage();
             Image scaledImage = image.getScaledInstance(900,700, Image.SCALE_DEFAULT);
             lblNewLabel.setIcon(new ImageIcon(scaledImage));
@@ -520,22 +550,33 @@ public class TetrisGUI extends JFrame implements ActionListener {
 
         }
 
+        /*public static void gameEnded(){
+            System.out.println("GAME END");
+            gameendPanel.setVisible(true);
+            tintPanel.setVisible(true);
+            //clip.stop();
+        }*/
 
     void setupGui() {
         frame.setSize(900, 700);
-        
+        frame.setTitle("Tetris");
+
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int centerX = (screenSize.width - frame.getWidth()) / 2;
         int centerY = (screenSize.height - frame.getHeight()) / 2;
         frame.setLocation(centerX, centerY);
 
-        ImageIcon imageIcon = new ImageIcon("C:\\Programming Course\\game\\Images\\favicon.png");
+        ImageIcon imageIcon = new ImageIcon("C:\\Programming Course\\CBL-Assignment\\Images\\favicon.png");
         frame.setIconImage(imageIcon.getImage());
+
+        frame.setFocusable(true);
+        frame.requestFocus();
 
         setupLevelButton();
         setupPauseButton();
         setupMuteButton();
 
+        setupGameEndPanel();
         setuphowtoplayPanel();
         setupPausePanel();
         setupTintPanel();
@@ -546,31 +587,55 @@ public class TetrisGUI extends JFrame implements ActionListener {
         setupScorePanel();
         
         setupOffsetPanel();
-        
-        
-        
+
+        gameendPanel.setVisible(false);
+        gamePanel.setVisible(false);
         pauseButton.setVisible(false);
         muteButton.setVisible(false);
         pausePanel.setVisible(false);
         tintPanel.setVisible(false);
         howtoplayPanel.setVisible(false);
-       
+
+        Action playAction = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                playButton.doClick();
+            }
+        };
+        
+        playButton.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "play");
+        playButton.getActionMap().put("play", playAction);
         
         playButton.addActionListener (new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("gay");
-                game.setVisible(true);       
-                game.startGame(); 
-                frame.revalidate();
-                game.requestFocus();
+
+            public void actionPerformed(ActionEvent e){
                 startPanel.setVisible(false);
                 pauseButton.setVisible(true);
                 muteButton.setVisible(true);
-                playSound("C:\\Programming Course\\game\\Original Tetris theme Tetris Soundtrack.wav");
-                muteButton.setIcon(setupIcon("C:\\Programming Course\\game\\Images\\unmute.png", muteButton));
+                playSound("C:\\Programming Course\\CBL-Assignment\\Original Tetris theme Tetris Soundtrack.wav");
+                muteButton.setIcon(setupIcon("C:\\Programming Course\\CBL-Assignment\\Images\\unmute.png", muteButton));
+
+                gamePanel.setVisible(true);
+                gamePanel.add(game, BorderLayout.CENTER);
+                gamePanel.revalidate();
+                gamePanel.repaint();
+                gamePanel.addKeyListener(game);
+                game.startGame(); 
+                game.requestFocus();
+                
             }
         });
+            
+        Action quitAction = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frame.dispose();
+            }
+        };
+        
+        frame.getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "quit");
+        frame.getRootPane().getActionMap().put("quit", quitAction);
 
         quitButton.addActionListener (new ActionListener() {
             @Override
@@ -617,39 +682,90 @@ public class TetrisGUI extends JFrame implements ActionListener {
         lButton.addActionListener (new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                setupBackground("C:\\Programming Course\\game\\Images\\control.png",howtoplayPanel); 
+                setupBackground("C:\\Programming Course\\CBL-Assignment\\Images\\control.png",howtoplayPanel); 
             }
         });
 
         rButton.addActionListener (new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                setupBackground("C:\\Programming Course\\game\\Images\\gameplayinfo.png",howtoplayPanel);        
+                setupBackground("C:\\Programming Course\\CBL-Assignment\\Images\\gameplayinfo.png",howtoplayPanel);        
             }
         });
 
         boolean[] mute = { false };
+        Action muteAction = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (mute[0]) {                   
+                    clip.start();
+                    mute[0] = false;
+                    muteButton.setIcon(setupIcon("C:\\Programming Course\\CBL-Assignment\\Images\\unmute.png", muteButton));
+                    //gamePanel.requestFocusInWindow();
+                } else {         
+                    clip.stop();
+                    mute[0] = true;   
+                    muteButton.setIcon(setupIcon("C:\\Programming Course\\CBL-Assignment\\Images\\mute.png", muteButton));    
+                    //gamePanel.requestFocusInWindow();           
+                } 
+            }
+        };
+
+        frame.getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_M, 0), "mute");
+        frame.getRootPane().getActionMap().put("mute", muteAction);
+
         muteButton.addActionListener (new ActionListener() {           
             @Override
             public void actionPerformed(ActionEvent e) {               
                 if (mute[0]) {                   
                     clip.start();
                     mute[0] = false;
-                    muteButton.setIcon(setupIcon("C:\\Programming Course\\game\\Images\\unmute.png", muteButton));
+                    muteButton.setIcon(setupIcon("C:\\Programming Course\\CBL-Assignment\\Images\\unmute.png", muteButton));
+                    //gamePanel.requestFocusInWindow();
                 } else {         
                     clip.stop();
                     mute[0] = true;   
-                    muteButton.setIcon(setupIcon("C:\\Programming Course\\game\\Images\\mute.png", muteButton));                 
+                    muteButton.setIcon(setupIcon("C:\\Programming Course\\CBL-Assignment\\Images\\mute.png", muteButton));    
+                    //gamePanel.requestFocusInWindow();           
                 }                
             }
         });
+
+        Action pauseAction = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (!game.isPaused) {
+                    tintPanel.setVisible(true);
+                    pausePanel.setVisible(true);                
+                    //clip.stop(); 
+                    game.isPaused = true;
+                    game.timer.stop();
+                } else {
+                    pausePanel.setVisible(false); 
+                    tintPanel.setVisible(false); 
+                    gamePanel.addKeyListener(game);
+                    /*if (mute[0]==false) {
+                        clip.start();              
+                    }     */
+                    game.isPaused = false;
+                    game.timer.start(); 
+                }
+                repaint();
+            }
+        };
+
+        frame.getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_P, 0), "pause");
+        frame.getRootPane().getActionMap().put("pause", pauseAction);
 
         pauseButton.addActionListener (new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 tintPanel.setVisible(true);
                 pausePanel.setVisible(true);                
-                clip.stop();             
+                clip.stop(); 
+                game.isPaused = true;
+                game.timer.stop();
+
             }
         });
 
@@ -658,9 +774,12 @@ public class TetrisGUI extends JFrame implements ActionListener {
             public void actionPerformed(ActionEvent e) {
                 pausePanel.setVisible(false); 
                 tintPanel.setVisible(false); 
+                gamePanel.addKeyListener(game);
                 if (mute[0]==false) {
                     clip.start();              
-                }             
+                }     
+                game.isPaused = false;
+                game.timer.start(); 
             }
         });
 
@@ -676,7 +795,7 @@ public class TetrisGUI extends JFrame implements ActionListener {
                 } else {
                     x[0] = x[0] + 5;
                 }      
-                levelButton.setIcon(setupIcon("C:\\Programming Course\\game\\Images\\level " + x[0] + ".png", levelButton));         
+                levelButton.setIcon(setupIcon("C:\\Programming Course\\CBL-Assignment\\Images\\level " + x[0] + ".png", levelButton));         
                 }
                 
         });
@@ -684,10 +803,12 @@ public class TetrisGUI extends JFrame implements ActionListener {
         frame.getContentPane().setBackground( Color.WHITE);
         frame.setVisible(true);
         frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+
     }
 
     public static void main(String[] args) {
-        new TetrisGUI().setupGui();
+        SwingUtilities.invokeLater(() -> {
+            new TetrisGUI().setupGui();
+        });
     }
-    
 }
