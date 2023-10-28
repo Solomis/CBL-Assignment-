@@ -56,30 +56,6 @@ public class TetrisGame extends JPanel implements ActionListener, KeyListener {
         scoreLabel = new JLabel();
         linesLabel = new JLabel();
         levelLabel = new JLabel();
-        holdLabel = new JLabel("HOLD") {
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                drawTetromino(g, holdTetromino);
-            }
-        };
-        holdLabel.setSize(2 * BLOCK_SIZE, 4 * BLOCK_SIZE);
-        nextLabel = new JLabel("NEXT") {
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                drawTetromino(g, nextTetromino);
-            }
-        };
-        nextLabel.setSize(2 * BLOCK_SIZE, 4 * BLOCK_SIZE);
-        lastLabel = new JLabel("LAST") {
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                drawTetromino(g, lastTetromino);
-            }
-        };
-        lastLabel.setSize(2 * BLOCK_SIZE, 4 * BLOCK_SIZE);
 
     }
 
@@ -282,7 +258,6 @@ public class TetrisGame extends JPanel implements ActionListener, KeyListener {
             if (!gameEnded()) {
                 newTetromino();
             } else {
-                System.out.println("game ended");
                 timer.stop(); 
             }
             
@@ -429,10 +404,9 @@ public class TetrisGame extends JPanel implements ActionListener, KeyListener {
                     moveRight();
                     break;
                 case KeyEvent.VK_DOWN:
-                    //score++;
-                    //print score here if you want increments from move down
                     moveDown();
                     score++;
+                    scoreLabel.setText("SCORE: " + score);
                     break;
                 case KeyEvent.VK_UP:
                     rotate();
@@ -494,6 +468,32 @@ public class TetrisGame extends JPanel implements ActionListener, KeyListener {
         initBoard();
         nextTetromino = TetrominoFactory.getRandomTetromino();
         lastTetromino = TetrominoFactory.getRandomTetromino();
+        holdLabel = new JLabel(){
+            @Override
+            protected void paintComponent(Graphics g) {
+                if (itemInHold){
+                    super.paintComponent(g);
+                    drawTetromino(g, holdTetromino);
+                }
+            }
+        };
+        holdLabel.setSize(2 * BLOCK_SIZE, 4 * BLOCK_SIZE);
+        nextLabel = new JLabel("NEXT") {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                drawTetromino(g, nextTetromino);
+            }
+        };
+        nextLabel.setSize(2 * BLOCK_SIZE, 4 * BLOCK_SIZE);
+        lastLabel = new JLabel("LAST") {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                drawTetromino(g, lastTetromino);
+            }
+        };
+        lastLabel.setSize(2 * BLOCK_SIZE, 4 * BLOCK_SIZE);
         newTetromino();
         itemInHold = false;
         updateLevel();
