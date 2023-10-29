@@ -2,6 +2,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "TetrisGame",
+            "request": "launch",
+            "mainClass": "TetrisGame",
+            "projectName": "CBL-Assignment_3b50162"
+        },
+        {
+            "type": "java",
             "name": "TetrisGUI",
             "request": "launch",
             "mainClass": "TetrisGUI",

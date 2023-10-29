@@ -122,9 +122,6 @@ public class TetrisGame extends JPanel implements ActionListener, KeyListener {
         removeFullLines();
         updateLevel();
         timer.setDelay(delay);
-        System.out.println("lines: " + lines 
-            + " totalLines: " + totalLines
-            + " level: " + level + " score: " + score + " delay: " + delay);
         lines = 0;
         scoreLabel.setText("SCORE: " + score);
         linesLabel.setText("LINES: " + totalLines);

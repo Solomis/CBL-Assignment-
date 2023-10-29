@@ -1,3 +1,4 @@
+//Here we import the necessary class we will use throughout the generation of the GUI.
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -8,7 +9,7 @@ import java.io.IOException;
 import javax.swing.*;
 import javax.sound.sampled.*;
 
-
+//Here we create the main class with all of our J components generated and declared inside. 
 public class TetrisGUI extends JFrame implements KeyListener, ActionListener {
     TetrisGame game;
 
@@ -72,7 +73,7 @@ public class TetrisGUI extends JFrame implements KeyListener, ActionListener {
     JButton themeButton;
     JButton okButton;
 
-    
+    //This is our constructor where we initialise and set as necessary each J component. 
     public TetrisGUI() {
         
         frame = new JFrame();
@@ -140,18 +141,9 @@ public class TetrisGUI extends JFrame implements KeyListener, ActionListener {
         requestFocus();
 
     }
-
+    //Declaration of a transparent color that will be used as background to some of the components. 
     Color trans = new Color(0,0,0,0);
-
-    public void setupBackground(String backgroundPath, JComponent jComponent) {
-        JLabel lblNewLabel = new JLabel();
-        ImageIcon imageIcon = new ImageIcon(backgroundPath);
-        Image image = imageIcon.getImage();
-        Image scaledImage = image.getScaledInstance(jComponent.getWidth(),jComponent.getHeight(), Image.SCALE_DEFAULT);
-        lblNewLabel.setIcon(new ImageIcon(scaledImage));
-        jComponent.add(lblNewLabel); 
-    }
-
+    //Here we created a simple method to set the icons of our buttons as needed.
     public ImageIcon setupIcon(String iconPath, JComponent jComponent) {
         ImageIcon originalIcon = new ImageIcon(iconPath);
         int buttonWidth = jComponent.getWidth();
@@ -160,9 +152,8 @@ public class TetrisGUI extends JFrame implements KeyListener, ActionListener {
         ImageIcon scaledIcon = new ImageIcon(scaledImage);           
         return scaledIcon;
     }
-
+    //Here is the method we use to fetch, play and loop the audio used in the program. 
     private Clip clip;
-
     public void playSound(String soundName) {            
         try {
             final AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(soundName).getAbsoluteFile());
@@ -176,7 +167,7 @@ public class TetrisGUI extends JFrame implements KeyListener, ActionListener {
             ex.printStackTrace( );
         }
     } 
-
+    //Here we import the font used throughout the game. 
     public Font font() {
         try {
             File fontFile = new File("C:/Programming Course/CBL-Assignment/font/SummerPixel22Regular-jE0W7.ttf");
@@ -188,7 +179,7 @@ public class TetrisGUI extends JFrame implements KeyListener, ActionListener {
             return null;
         }
     }
-
+    //Here we created a class player with setter and getter methods for each of the atributes username and highscore.
     public class player {
         private String username;
         private int highscore;
@@ -214,13 +205,13 @@ public class TetrisGUI extends JFrame implements KeyListener, ActionListener {
             this.highscore = highScore;
         }
     }
-
-    public player player1 = new player("",0);
-    public player player2 = new player("",0);
-    public player player3 = new player("",0);
-    public player player4 = new player("",0);
-    public player player5 = new player("",0);
-
+    //Here we declare and initialise 5 players that we will output as the highests scores.
+    public player player1 = new player("Player ",5000);
+    public player player2 = new player("PLayer ",4000);
+    public player player3 = new player("Player ",3000);
+    public player player4 = new player("PLayer ",2000);
+    public player player5 = new player("Player ",1000);
+    //Here we set up our theme button to its correspanding size, location, background and icon.
     public void setupThemeButton(){
         startPanel.add(themeButton);
         themeButton.setContentAreaFilled(false);
@@ -231,7 +222,7 @@ public class TetrisGUI extends JFrame implements KeyListener, ActionListener {
         themeButton.setIcon(setupIcon("C:/Programming Course/CBL-Assignment/images/dark.png", themeButton));
 
     }
-
+    //Here we set up our replay button to its correspanding size, location, background and icon.
     public void setupReplayButton(){
         gameendPanel.add(replayButton);
         replayButton.setContentAreaFilled(false);
@@ -239,7 +230,7 @@ public class TetrisGUI extends JFrame implements KeyListener, ActionListener {
         replayButton.setBorderPainted(false);  
         replayButton.setIcon(setupIcon("C:/Programming Course/CBL-Assignment/images/replay.png", replayButton));
     }
-    
+    //Here we set up our left arrow button to its correspanding size, location, background and icon.
     public void setuplButton() {
         howtoplayPanel.add(lButton);
         lButton.setContentAreaFilled(false);
@@ -248,7 +239,7 @@ public class TetrisGUI extends JFrame implements KeyListener, ActionListener {
         lButton.setIcon(setupIcon("C:/Programming Course/CBL-Assignment/images/leftarrow.png", lButton));
 
     }
-
+//Here we set up our right arrow button to its correspanding size, location, background and icon.
     public void setuprButton() {
         howtoplayPanel.add(rButton);
         rButton.setContentAreaFilled(false);
@@ -257,7 +248,7 @@ public class TetrisGUI extends JFrame implements KeyListener, ActionListener {
         rButton.setIcon(setupIcon("C:/Programming Course/CBL-Assignment/images/rightarrow.png", rButton));
 
     }
-
+    //Here we set up our done button to its correspanding size, location, background and icon used in the informations panel.
     public void setupdoneButton() {
         howtoplayPanel.add(doneButton);
         doneButton.setContentAreaFilled(false);
@@ -265,7 +256,7 @@ public class TetrisGUI extends JFrame implements KeyListener, ActionListener {
         doneButton.setBorderPainted(false);
         doneButton.setIcon(setupIcon("C:/Programming Course/CBL-Assignment/images/backarrow.png", doneButton));            
     }
-
+    //Here we set up our play button to its correspanding size, location, background and icon.
     public void setupPlayButton() {
         startPanel.add(playButton);
         playButton.setContentAreaFilled(false);
@@ -273,7 +264,7 @@ public class TetrisGUI extends JFrame implements KeyListener, ActionListener {
         playButton.setBorderPainted(false);
         playButton.setIcon(setupIcon("C:/Programming Course/CBL-Assignment/images/play.png", playButton));
     }
-    
+    //Here we set up our level button to its correspanding size, location, background and icon.
     public void setupLevelButton() {
         startPanel.add(levelButton);
         levelButton.setContentAreaFilled(false);        
@@ -282,7 +273,7 @@ public class TetrisGUI extends JFrame implements KeyListener, ActionListener {
         levelButton.setIcon(setupIcon("C:/Programming Course/CBL-Assignment/images/level_1.png", levelButton));
         levelButton.setFocusPainted(false);
     }
-
+    //Here we set up our quit button to its correspanding size, location, background and icon.
     public void setupQuitButton() {
         pausePanel.add(quitButton);
         quitButton.setContentAreaFilled(false);
@@ -290,7 +281,7 @@ public class TetrisGUI extends JFrame implements KeyListener, ActionListener {
         quitButton.setBorderPainted(false);
         quitButton.setIcon(setupIcon("C:/Programming Course/CBL-Assignment/images/quit.png", quitButton));
     }
-
+    //Here we set up our second quit button to its correspanding size, location, background and icon.
     public void setupQuitButton2() {
         startPanel.add(quitButton2);
         quitButton2.setContentAreaFilled(false);
@@ -300,7 +291,7 @@ public class TetrisGUI extends JFrame implements KeyListener, ActionListener {
         quitButton2.setOpaque(true);
         quitButton2.setIcon(setupIcon("C:/Programming Course/CBL-Assignment/images/quit2.png", quitButton2));
     }
-    
+    //Here we set up our information on how to play button to its correspanding size, location, background and icon.
     public void setuphowtoplayButton() {
         pausePanel.add(howtoplayButton);
         howtoplayButton.setContentAreaFilled(false);
@@ -308,7 +299,7 @@ public class TetrisGUI extends JFrame implements KeyListener, ActionListener {
         howtoplayButton.setBorderPainted(false);
         howtoplayButton.setIcon(setupIcon("C:/Programming Course/CBL-Assignment/images/howtoplay.png", howtoplayButton));
     }
-
+    //Here we set up our second information on how to play button to its correspanding size, location, background and icon.
     public void setuphowtoplayButton2() {
         startPanel.add(howtoplayButton2);
         howtoplayButton2.setContentAreaFilled(false);
@@ -318,8 +309,7 @@ public class TetrisGUI extends JFrame implements KeyListener, ActionListener {
         howtoplayButton2.setOpaque(true);
         howtoplayButton2.setIcon(setupIcon("C:/Programming Course/CBL-Assignment/images/howtoplay2.png", howtoplayButton2));
     }
-
-
+    //Here we set up our resume button to its correspanding size, location, background and icon.
     public void setupResumeButton() {
         pausePanel.add(resumeButton);
         resumeButton.setContentAreaFilled(false);
@@ -327,7 +317,7 @@ public class TetrisGUI extends JFrame implements KeyListener, ActionListener {
         resumeButton.setBorderPainted(false);
         resumeButton.setIcon(setupIcon("C:/Programming Course/CBL-Assignment/images/resume.png", resumeButton));
     }
-
+    //Here we set up our pause button to its correspanding size, location, background and icon.
     public void setupPauseButton() {
         frame.add(pauseButton);  
         pauseButton.setContentAreaFilled(false);                  
@@ -335,16 +325,17 @@ public class TetrisGUI extends JFrame implements KeyListener, ActionListener {
         pauseButton.setBorderPainted(false);
         pauseButton.setIcon(setupIcon("C:/Programming Course/CBL-Assignment/images/pause.png", pauseButton));              
     }
-
+    //Here we set up our mute/unmute button to its correspanding size, location, background and icon.
     public void setupMuteButton() {
         frame.add(muteButton);
         muteButton.setContentAreaFilled(false);
         muteButton.setBounds(665, 500,70, 70);
         muteButton.setBorderPainted(false);
         muteButton.setIcon(setupIcon("C:/Programming Course/CBL-Assignment/images/unmute.png", muteButton));
-        
     }
-
+    //Here we set up our new high score panel that will be desplayed when a new high score is achived,
+    //this panel includes a textbox that the user can input their username and there score along with,
+    //the nessesary labels of 'new high score' and 'enter your username'.
     public void setupNewHighScorePanel(){
         frame.add(newhighscorPanel);
         newhighscorPanel.setLayout(null);
@@ -373,11 +364,13 @@ public class TetrisGUI extends JFrame implements KeyListener, ActionListener {
         newhighscorPanel.add(usernamTextField);
 
         okButton.setBounds(175,240,50,50);
-        okButton.setFont(font().deriveFont(20f));
-        okButton.setForeground(Color.white);
+        okButton.setContentAreaFilled(false);
+        okButton.setBorderPainted(false);
+        okButton.setIcon(setupIcon("C:/Programming Course/CBL-Assignment/images/ok.png", okButton));
         newhighscorPanel.add(okButton);
     }
-    
+    //Here we set up our game over panel that will display the appropriate message, the top 5 high scores 
+    //along with a replay button to replay the game.
     public void setupGameEndPanel() {
         frame.add(gameendPanel);
         gameendPanel.setLayout(null);
@@ -390,10 +383,12 @@ public class TetrisGUI extends JFrame implements KeyListener, ActionListener {
         gameendPanel.add(gameoverLabel);
 
         setupHighScorePanel2();
+        gameendPanel.repaint();
         setupReplayButton();
 
     }
-
+    //In this panel we display information of how to play the game, the scoreing
+    //system and the keys used in the game.
     public void setuphowtoplayPanel() {
         frame.add(howtoplayPanel);
         howtoplayPanel.setSize(800, 600);
@@ -410,19 +405,20 @@ public class TetrisGUI extends JFrame implements KeyListener, ActionListener {
         setuprButton();
         
     }
+    //Here we created a tint panel that will be displayed over the whole
+    //frame as need for example when the game is paused.
     public Color tintColor = new Color(0,0,0,200);
-    
     public void setupTintPanel() {
         frame.add(tintPanel);
         tintPanel.setSize(900, 700);
         tintPanel.setBackground(tintColor);
     }
-
+    //Here we set up the high scores panel that will simply display the top 5 high scores.
     public void setupHighScorePanel2() { 
         gameendPanel.add(highscorePanel2);
         highscorePanel2.setSize(300, 250);
         highscorePanel2.setLocation(0, 60);
-        highscorePanel2.setBackground(Color.darkGray);
+        highscorePanel2.setBackground(new Color(0,0,0,0));
         highscorePanel2.setLayout(null);
         highScoreLabel2.setFont(font());
         highScoreLabel2.setBounds(0, 10, 300, 50);  
@@ -458,9 +454,10 @@ public class TetrisGUI extends JFrame implements KeyListener, ActionListener {
         highScore5Label2.setBounds(0,180,300,50);
         highScore5Label2.setForeground(Color.white);
         highscorePanel2.add(highScore5Label2);
+        highscorePanel2.repaint();
 
     }
-
+    //Here we set up the second high scores panel that will simply display the top 5 high scores.
     public void setupHighScorePanel() { 
         startPanel.add(highscorePanel);
         highscorePanel.setSize(250, 200);
@@ -501,9 +498,11 @@ public class TetrisGUI extends JFrame implements KeyListener, ActionListener {
         highScore5Label.setBounds(30,160,200,50);
         highScore5Label.setForeground(Color.white);
         highscorePanel.add(highScore5Label);
+        highscorePanel.repaint();
 
     }
-
+    //THis is our pause panel that is displayed when the game is paused and contains 
+    //the quit the resume and one how to play button and the corresponding label.
     public void setupPausePanel() {
         frame.add(pausePanel);
         pausePanel.setSize(250, 420);
@@ -522,7 +521,9 @@ public class TetrisGUI extends JFrame implements KeyListener, ActionListener {
         setupQuitButton();
         quitButton.setBounds(55, 280,150, 75);
     }
-
+    //Here the start panel is set up displaying the tetris logo the play and level buttons
+    //to start and set the difficulty level, along with the top 5 scores and the theme,
+    //how to play and quit buttons.
     public void setupStartPanel() {
         Color startmenucolor = new Color(0,0,0,200);
         frame.add(startPanel);
@@ -534,6 +535,7 @@ public class TetrisGUI extends JFrame implements KeyListener, ActionListener {
         setupPlayButton();  
         setupLevelButton();
         setupHighScorePanel();
+        startPanel.repaint();
 
         setupQuitButton2();
         setupThemeButton();
@@ -549,13 +551,13 @@ public class TetrisGUI extends JFrame implements KeyListener, ActionListener {
         startPanel.add(lblNewLabel);
     }
     
-
+    //Here is our game panel where we import the game from the TetrisGame class.
     public void setupGamePanel() {
         frame.add(gamePanel); 
         gamePanel.setSize(300,600);
         gamePanel.setLocation(300,50); 
         }
-
+    //In this panel we import the next 2 tetrominos to drop 
     public void setupNextPanel() {
 
         frame.add(nextPanel);
@@ -577,7 +579,8 @@ public class TetrisGUI extends JFrame implements KeyListener, ActionListener {
         nextPanelLabel.add(nextLabel);
         
     }
-
+    //In this panel we show the hold tetromino that is a tetromino that is hold by the 
+    //user to use in a later point in the game by pressing 'c'.
     public void setupHoldPanel() {
 
         frame.add(holdPanel);
@@ -600,7 +603,8 @@ public class TetrisGUI extends JFrame implements KeyListener, ActionListener {
     }
 
     
-
+    //In this panel we set up the score panel that imports the score, lines 
+    //and level of the game from the TetrisGame class.
     public void setupScorePanel() {
 
         frame.add(scorePanel);
@@ -634,7 +638,7 @@ public class TetrisGUI extends JFrame implements KeyListener, ActionListener {
         game.linesLabel.setText("LINES: 0");
 
     }
-
+    //This is simply the background panel to display the beautiful graphics at teh back of the frame. 
     public void setupOffsetPanel() {
 
         frame.add(offsetPanel);
@@ -645,7 +649,7 @@ public class TetrisGUI extends JFrame implements KeyListener, ActionListener {
         JLabel lblNewLabel = new JLabel();
         ImageIcon imageIcon = new ImageIcon("C:/Programming Course/CBL-Assignment/images/backgroundframe.jpg");
         Image image = imageIcon.getImage();
-        Image scaledImage = image.getScaledInstance(900,700, Image.SCALE_DEFAULT);
+        Image scaledImage = image.getScaledInstance(900,700, Image.SCALE_SMOOTH);
         lblNewLabel.setIcon(new ImageIcon(scaledImage));
         offsetPanel.add(lblNewLabel);
 
@@ -653,8 +657,9 @@ public class TetrisGUI extends JFrame implements KeyListener, ActionListener {
         
     private String username = "";
     private Timer timer; 
-
+    //Here we set up the whole GUI where we import all the methods from above and set up the frame.
     void setupGui() {
+        //Here we initialize the size and title of the frame and center it to the scree. 
         frame.setSize(900, 700);
         frame.setTitle("Tetris");
 
@@ -662,18 +667,18 @@ public class TetrisGUI extends JFrame implements KeyListener, ActionListener {
         int centerX = (screenSize.width - frame.getWidth()) / 2;
         int centerY = (screenSize.height - frame.getHeight()) / 2;
         frame.setLocation(centerX, centerY);
-
+        //Here we change the favicon of the frame.
         ImageIcon imageIcon = new ImageIcon("C:/Programming Course/CBL-Assignment/images/favicon.png");
         frame.setIconImage(imageIcon.getImage());
 
         frame.setFocusable(true);
         frame.requestFocus();
 
+        //Here we import all the methods necessary from above. 
         setupLevelButton();
         setupPauseButton();
         setupMuteButton();
 
-        
         setupNewHighScorePanel();
         setupGameEndPanel();
         setuphowtoplayPanel();
@@ -686,7 +691,7 @@ public class TetrisGUI extends JFrame implements KeyListener, ActionListener {
         setupScorePanel();
         
         setupOffsetPanel();
-
+        //We set the necessary panel to invisible so can show them as needed.
         newhighscorPanel.setVisible(false);
         gameendPanel.setVisible(false);
         gamePanel.setVisible(false);
@@ -695,7 +700,9 @@ public class TetrisGUI extends JFrame implements KeyListener, ActionListener {
         pausePanel.setVisible(false);
         tintPanel.setVisible(false);
         howtoplayPanel.setVisible(false);
-
+        //This is the button that takes the username from the textfield in the 
+        //New high score panel and set it to the player class variable and 
+        //chnage the order of the high scores as needed.
         okButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -703,49 +710,67 @@ public class TetrisGUI extends JFrame implements KeyListener, ActionListener {
                 newhighscorPanel.setVisible(false);
                 gameendPanel.setVisible(true);
                 timer.stop();
-                if (game.score>player1.getHighscore()){
-                            System.out.println("player1 entered");
-                            player1.setHighscore(game.score);
-                            player1.setUsername(username);
-                            System.out.println("this is the username: "+username+game.score);
-                        }else if (game.score>player2.getHighscore()){
-                            System.out.println("player2 entered");
-                            player2.setHighscore(game.score);
-                            player2.setUsername(username);
-                        }else if (game.score>player3.getHighscore()){
-                            System.out.println("player3 entered");
-                            player3.setHighscore(game.score);
-                            player3.setUsername(username);
-                        }else if (game.score>player4.getHighscore()){
-                            System.out.println("player4 entered");
-                            player4.setHighscore(game.score);
-                            player4.setUsername(username);
-                        }else if (game.score>player5.getHighscore()){
-                            System.out.println("player5 entered");
-                            player5.setHighscore(game.score);
-                            player5.setUsername(username);
-                        }
-                        highScore1Label2.setText(player1.getUsername()+" "+player1.getHighscore());
-                        highScore1Label2.setText(player2.getUsername()+" "+player2.getHighscore());
-                        highScore1Label2.setText(player3.getUsername()+" "+player3.getHighscore());
-                        highScore1Label2.setText(player4.getUsername()+" "+player4.getHighscore());
-                        highScore1Label2.setText(player5.getUsername()+" "+player5.getHighscore());
-                        highscorePanel2.repaint();
-                        highScore1Label.setText(player1.getUsername()+" "+player1.getHighscore());
-                        highScore1Label.setText(player2.getUsername()+" "+player2.getHighscore());
-                        highScore1Label.setText(player3.getUsername()+" "+player3.getHighscore());
-                        highScore1Label.setText(player4.getUsername()+" "+player4.getHighscore());
-                        highScore1Label.setText(player5.getUsername()+" "+player5.getHighscore());
-                        highscorePanel.repaint();
-                        System.out.println(player1.getUsername()+player1.getHighscore());
-                    }
+                if (game.score > player1.getHighscore()) {
+                    player5.setHighscore(player4.getHighscore());
+                    player5.setUsername(player4.getUsername());
+                    player4.setHighscore(player3.getHighscore());
+                    player4.setUsername(player3.getUsername());
+                    player3.setHighscore(player2.getHighscore());
+                    player3.setUsername(player2.getUsername());
+                    player2.setHighscore(player1.getHighscore());
+                    player2.setUsername(player1.getUsername());
+                
+                    player1.setHighscore(game.score);
+                    player1.setUsername(username);
+                } else if (game.score > player2.getHighscore()) {
+                    player5.setHighscore(player4.getHighscore());
+                    player5.setUsername(player4.getUsername());
+                    player4.setHighscore(player3.getHighscore());
+                    player4.setUsername(player3.getUsername());
+                    player3.setHighscore(player2.getHighscore());
+                    player3.setUsername(player2.getUsername());
+                
+                    player2.setHighscore(game.score);
+                    player2.setUsername(username);
+                } else if (game.score > player3.getHighscore()) {
+                    player5.setHighscore(player4.getHighscore());
+                    player5.setUsername(player4.getUsername());
+                    player4.setHighscore(player3.getHighscore());
+                    player4.setUsername(player3.getUsername());
+                
+                    player3.setHighscore(game.score);
+                    player3.setUsername(username);
+                } else if (game.score > player4.getHighscore()) {
+                    player5.setHighscore(player4.getHighscore());
+                    player5.setUsername(player4.getUsername());
+                
+                    player4.setHighscore(game.score);
+                    player4.setUsername(username);
+                } else if (game.score > player5.getHighscore()) {
+                    player5.setHighscore(game.score);
+                    player5.setUsername(username);
+                }
+                highScore1Label2.setText(player1.getUsername()+" "+player1.getHighscore());
+                highScore2Label2.setText(player2.getUsername()+" "+player2.getHighscore());
+                highScore3Label2.setText(player3.getUsername()+" "+player3.getHighscore());
+                highScore4Label2.setText(player4.getUsername()+" "+player4.getHighscore());
+                highScore5Label2.setText(player5.getUsername()+" "+player5.getHighscore());
+                highscorePanel2.repaint();
+                highScore1Label.setText(player1.getUsername()+" "+player1.getHighscore());
+                highScore2Label.setText(player2.getUsername()+" "+player2.getHighscore());
+                highScore3Label.setText(player3.getUsername()+" "+player3.getHighscore());
+                highScore4Label.setText(player4.getUsername()+" "+player4.getHighscore());
+                highScore5Label.setText(player5.getUsername()+" "+player5.getHighscore());
+                highscorePanel.repaint();
+            }
         });
-
-        Action customAction = new AbstractAction() {
+        //Here we use a timer to check when the game has ended and display
+        //the game end panel or the new high score if it has set one.
+        //We also stop all keyboard imports so the user can type his username.
+        timer = new Timer(1000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (game.gameEnded()) { 
-                    playButton.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "none");
                     frame.getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_M, 0), "none");
                     frame.getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_P, 0), "none"); 
                     gamePanel.setVisible(false);
@@ -755,48 +780,52 @@ public class TetrisGUI extends JFrame implements KeyListener, ActionListener {
                     clip.stop();
                     muteButton.setVisible(false);
                     pauseButton.setVisible(false);
+                    highScore1Label2.setText(player1.getUsername()+" "+player1.getHighscore());
+                    highScore1Label2.setText(player2.getUsername()+" "+player2.getHighscore());
+                    highScore1Label2.setText(player3.getUsername()+" "+player3.getHighscore());
+                    highScore1Label2.setText(player4.getUsername()+" "+player4.getHighscore());
+                    highScore1Label2.setText(player5.getUsername()+" "+player5.getHighscore());
+                    highscorePanel2.repaint();
+                    gameendPanel.repaint();
+                    highScore1Label.setText(player1.getUsername()+" "+player1.getHighscore());
+                    highScore1Label.setText(player2.getUsername()+" "+player2.getHighscore());
+                    highScore1Label.setText(player3.getUsername()+" "+player3.getHighscore());
+                    highScore1Label.setText(player4.getUsername()+" "+player4.getHighscore());
+                    highScore1Label.setText(player5.getUsername()+" "+player5.getHighscore());
+                    highscorePanel.repaint();
+                    startPanel.repaint();
                     if (game.score>player5.getHighscore() || (username != null && !username.isEmpty())){
                         newhighscorPanel.setVisible(true);
                         newscoreLabel.setText("" + game.score);
                     }else{
+                        gameendPanel.repaint();
                         gameendPanel.setVisible(true);
                     }                  
-                }
-                
-            }
-        };
-        
-        InputMap inputMap = frame.getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
-        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F6, 0), "customAction");
-
-        ActionMap actionMap = frame.getRootPane().getActionMap();
-        actionMap.put("customAction", customAction);
-
-        timer = new Timer(1000, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    Robot r = new Robot();
-                    r.keyPress(KeyEvent.VK_F6);
-                    r.keyRelease(KeyEvent.VK_F6);
-                } catch (AWTException exception) {
-                    exception.printStackTrace();
                 }
             }
         });
 
         timer.start();
-
+        //Here we set the 'enter' key to press the play or the replay button respactively.
         Action playAction = new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                playButton.doClick();            
+                if (startPanel.isVisible()) {
+                    playButton.doClick();
+                } else if (gameendPanel.isVisible()) {
+                    replayButton.doClick();
+                }           
             }
         };
 
         playButton.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "play");
         playButton.getActionMap().put("play", playAction);
 
+        replayButton.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "replay");
+        replayButton.getActionMap().put("replay", playAction);
+        //The replay button is very similar to the play button it gives access to the key bindings again 
+        //displays the game panel in the place of the game end panel and starts the game, but it keeps
+        //the mute state the same, and also updates the next and hold panels to the next game starting.
         boolean[] mute = { false };
         replayButton.addActionListener(new ActionListener(){
             @Override
@@ -835,10 +864,15 @@ public class TetrisGUI extends JFrame implements KeyListener, ActionListener {
                 nextPanelLabel.repaint();
                 usernamTextField.setText("");
                 newhighscorPanel.repaint();
+                game.score = 0;
+                game.lines = 0;
+                game.level = 1;
 
             }
         });
-        
+        //In the play button we load and start the tetris soundtrack, hide the start panel to display the
+        //game in its place and we start the game making mute and pause buttons visible
+        //we also update the next and hold panels to the new game that is starting.
         playButton.addActionListener (new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e){
@@ -868,7 +902,7 @@ public class TetrisGUI extends JFrame implements KeyListener, ActionListener {
                 nextPanelLabel.repaint();
             }
         });
-          
+        //Here we set a key bind on the 'esc' key to quit the game when pressed and stop the music.
         Action quitAction = new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -879,21 +913,20 @@ public class TetrisGUI extends JFrame implements KeyListener, ActionListener {
         
         frame.getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "quit");
         frame.getRootPane().getActionMap().put("quit", quitAction);
-
+        //This next two buttons simply quit the game when pressed.
         quitButton.addActionListener (new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 frame.dispose();               
             }
         });
-
         quitButton2.addActionListener (new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 frame.dispose();               
             }
         });
-
+        //Here we can toggle on the theme drak/light of the grid in the game for better user expirence.
         themeButton.addActionListener (new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -908,7 +941,9 @@ public class TetrisGUI extends JFrame implements KeyListener, ActionListener {
                 }               
             }
         });
-
+        //THe next two buttons do the same actiond but from a different starting place,
+        //they display the how to play information panel and hide the originating panel 
+        //also displaying a tint on the frame to focus on the info panel.
         howtoplayButton.addActionListener (new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -918,7 +953,6 @@ public class TetrisGUI extends JFrame implements KeyListener, ActionListener {
                 muteButton.setVisible(false);      
             }
         });
-
         howtoplayButton2.addActionListener (new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -927,7 +961,8 @@ public class TetrisGUI extends JFrame implements KeyListener, ActionListener {
                 startPanel.setVisible(false);
             }
         });
-
+        //this button basically inverts the actions of the how to play button both of them respactively,
+        //it removes the tint and hides the how to play panel as necessary.
         doneButton.addActionListener (new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -943,14 +978,14 @@ public class TetrisGUI extends JFrame implements KeyListener, ActionListener {
                 }
             }
         });
-
+        //This button just changes the background of the information how to play panel to display more information.
         lButton.addActionListener (new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) { 
                 howtoLabel.setIcon(setupIcon("C:/Programming Course/CBL-Assignment/images/control.png", howtoLabel));
             }
         });
-
+        //This button just changes the background of the information how to play panel to display more information.
         rButton.addActionListener (new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -958,7 +993,7 @@ public class TetrisGUI extends JFrame implements KeyListener, ActionListener {
             }
         });
 
-        
+        //Here we bind the mute/unmute actions sam as the mute button to the 'm' key for better usability.
         Action muteAction = new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -978,7 +1013,8 @@ public class TetrisGUI extends JFrame implements KeyListener, ActionListener {
 
         frame.getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_M, 0), "mute");
         frame.getRootPane().getActionMap().put("mute", muteAction);
-
+        //Here is the mute/unmute button that stops the clip sound and starts it again if it is pressed twice,
+        //and it changes the icon of the button to diplay its state.
         muteButton.addActionListener (new ActionListener() {           
             @Override
             public void actionPerformed(ActionEvent e) {               
@@ -995,7 +1031,10 @@ public class TetrisGUI extends JFrame implements KeyListener, ActionListener {
                 }                
             }
         });
-
+        //Here we set up a key binding on 'p' to pause and resume the game if pressed again,
+        //it basically does what the pause and resume buttons do but using the key 'p'.
+        //It pauses the game nad displayes the pause panel with the tint panel in the 
+        //background to give focus on the pause panel.
         Action pauseAction = new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -1021,7 +1060,7 @@ public class TetrisGUI extends JFrame implements KeyListener, ActionListener {
 
         frame.getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_P, 0), "pause");
         frame.getRootPane().getActionMap().put("pause", pauseAction);
-
+        //The pause buttons pauses the game and displays the pause panel .
         pauseButton.addActionListener (new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -1033,7 +1072,7 @@ public class TetrisGUI extends JFrame implements KeyListener, ActionListener {
                 game.requestFocus();
             }
         });
-
+        //This is a simple resume button that besically inverts the actions of the paused button.
         resumeButton.addActionListener (new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -1051,7 +1090,8 @@ public class TetrisGUI extends JFrame implements KeyListener, ActionListener {
 
         final int[] x = { 1 };
         game.startLevel = x[0];
-
+        //Here we set up the actions of the level button to change the buttons image to display the 
+        //coresponding level and chnage the level of the game.
         levelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {                                
@@ -1072,7 +1112,7 @@ public class TetrisGUI extends JFrame implements KeyListener, ActionListener {
                 }
                 
         });
-        
+        //This are more frame set ups, to close, be visible and repaint all these changes from above.
         frame.getContentPane().setBackground( Color.WHITE);
         frame.setVisible(true);
         frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -1085,7 +1125,7 @@ public class TetrisGUI extends JFrame implements KeyListener, ActionListener {
             new TetrisGUI().setupGui();
         });
     }
-
+    //Here we declare the methods used from the keylistener class.
     @Override
     public void actionPerformed(ActionEvent e) {
         // TODO Auto-generated method stub
