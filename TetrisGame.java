@@ -449,7 +449,6 @@ public class TetrisGame extends JPanel implements ActionListener, KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {
     }
-
     public static void main(String[] args) {
         JFrame frame = new JFrame("Tetris Game");
         

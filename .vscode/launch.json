@@ -1,0 +1,17 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "TetrisGUI",
+            "request": "launch",
+            "mainClass": "TetrisGUI",
+            "projectName": "CBL-Assignment_3b50162"
+        },
+        {
+            "type": "java",
+            "name": "Launch Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        }
+    ]
+}
